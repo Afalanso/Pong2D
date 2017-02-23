@@ -29,25 +29,29 @@ public class InputManager : MonoBehaviour
         //TOUCHE UP J1
         if(Input.GetKey(KeyCode.Z))
         {            
-            seDeplacerVersHaut(GO_Joueur1);
+            if(this.GO_Joueur1.activeSelf)
+                seDeplacerVersHaut(GO_Joueur1);
         }
 
         //TOUCHE DOWN J1
         if (Input.GetKey(KeyCode.S))
-        {           
-            seDeplacerVersBas(GO_Joueur1);
+        {
+            if (this.GO_Joueur1.activeSelf)
+                seDeplacerVersBas(GO_Joueur1);
         }
 
         //TOUCHE UP J2
         if (Input.GetKey(KeyCode.UpArrow))
-        {        
-            seDeplacerVersHaut(GO_Joueur2);
+        {
+            if (this.GO_Joueur2.activeSelf)
+                seDeplacerVersHaut(GO_Joueur2);
         }
 
         //TOUCHE DOWN J2
         if (Input.GetKey(KeyCode.DownArrow))
-        {            
-            seDeplacerVersBas(GO_Joueur2);
+        {
+            if (this.GO_Joueur2.activeSelf)
+                seDeplacerVersBas(GO_Joueur2);
         }
 
         //TOUCHE ECHAPE

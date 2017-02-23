@@ -8,6 +8,7 @@ public class UIManager : MonoBehaviour
 
     public GameObject gameManager;
     public GameObject menuPause;
+    public GameObject menuFinPartie;
 
     public Text scoreJ1;
     public Text scoreJ2;
@@ -20,6 +21,7 @@ public class UIManager : MonoBehaviour
         this.scoreJ2.text = "0";
         this.DecompteBalle.enabled = false;
         this.menuPause.SetActive(false);
+        this.menuFinPartie.SetActive(false);
 
     }
 
@@ -44,19 +46,31 @@ public class UIManager : MonoBehaviour
 
     public void AfficherMenuPause()
     {
-        
-
         this.menuPause.SetActive(true);
     }
 
     public void CacherMenuPause()
     {
-        
-
         this.menuPause.SetActive(false);
+    }
 
-    }       
-       
+    public void AfficherMenuFin(string pseudoJoueurGagnant, int scoreJ1, int scoreJ2)
+    {
+        this.menuFinPartie.SetActive(true);        
+
+        //On affiche le pseudo du gagant
+        Text textFelicitation = GameObject.Find("TextFelicitation").GetComponent<Text>();
+        textFelicitation.text = "Félicitation " + pseudoJoueurGagnant + " !";
+
+
+        //On affiche les scores des deux joueurs
+        Text TextScoreJ1 = GameObject.Find("TextScoreJ1").GetComponent<Text>();
+        TextScoreJ1.text = scoreJ1.ToString();
+
+        Text TextScoreJ2 = GameObject.Find("TextScoreJ2").GetComponent<Text>();
+        TextScoreJ2.text = scoreJ2.ToString();
+
+    }
 
 }
 

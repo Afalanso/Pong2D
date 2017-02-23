@@ -9,10 +9,14 @@ public class GameManager : MonoBehaviour
     public static int scoreJ1, scoreJ2;
     public static float decompteBalle;
 
+    public GameObject joueur1;
+    public GameObject joueur2;
     public GameObject son;
     public GameObject sonJeu;
     public GameObject balle;
     public UIManager uiManager;
+
+    public float scoreWinCondition;
 
     private GameObject nouvelleBalle;
     private bool _decompteBalleEnCours;
@@ -29,6 +33,7 @@ public class GameManager : MonoBehaviour
         GameManager.scoreJ2 = 0;
 
         this.estEnPause = false;
+        this.scoreWinCondition = 1;
 
         this.InstancierNouvelleBalle();
     }
@@ -36,15 +41,21 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //ON TEST SI LA BALLE EN COURS EST DETRUITE ET SI UN COMPTEUR DE LANCEMENT BALLE N'EST PAS EN COURS
-        if (nouvelleBalle == null && _decompteBalleEnCours != true)
+        //On test si fin de partie
+        if (GameManager.scoreJ1 == this.scoreWinCondition || GameManager.scoreJ2 == this.scoreWinCondition)
         {
-            //SON BUT
-            son.GetComponent<AudioSource>().Play();
-
-            this.InstancierNouvelleBalle();
+            this.FinPartie();
         }
-
+        else
+        {
+            //ON TEST SI LA BALLE EN COURS EST DETRUITE ET SI UN COMPTEUR DE LANCEMENT BALLE N'EST PAS EN COURS
+            if (nouvelleBalle == null && _decompteBalleEnCours != true)
+            {
+                //SON BUT
+                son.GetComponent<AudioSource>().Play();
+                this.InstancierNouvelleBalle();
+            }
+        }
     }
 
 
@@ -101,6 +112,25 @@ public class GameManager : MonoBehaviour
     public void RevenirAuMenuPrincipal()
     {
         UnityEngine.SceneManagement.SceneManager.LoadScene("Pong2D_MenuPrincipal");
+    }
+
+    public void FinPartie()
+    {
+        string pseudoJoueurGagnant;
+
+        if (GameManager.scoreJ1 == this.scoreWinCondition)
+            pseudoJoueurGagnant = "Joueur 1";
+        else
+            pseudoJoueurGagnant = "Joueur 2";
+
+        this.uiManager.scoreJ1.enabled = false;
+        this.uiManager.scoreJ2.enabled = false;
+
+        this.uiManager.AfficherMenuFin(pseudoJoueurGagnant, GameManager.scoreJ1, GameManager.scoreJ2);
+
+        this.joueur1.SetActive(false);
+        this.joueur2.SetActive(false);       
+
     }
 
 
