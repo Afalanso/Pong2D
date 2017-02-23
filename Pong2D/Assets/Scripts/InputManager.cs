@@ -51,9 +51,12 @@ public class InputManager : MonoBehaviour
         }
 
         //TOUCHE ECHAPE
-        if (Input.GetKey(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Escape))
         {
-            this.gameManager.MettreEnPause();
+            if(!gameManager.estEnPause)
+                this.gameManager.MettreEnPause();
+            else
+                this.gameManager.ReprendreLeJeu();
         }        
 
     }

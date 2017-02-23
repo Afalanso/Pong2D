@@ -17,15 +17,18 @@ public class GameManager : MonoBehaviour
     private GameObject nouvelleBalle;
     private bool _decompteBalleEnCours;
 
+    public bool estEnPause;
+
 
     // Use this for initialization
     void Start()
     {
         sonJeu.GetComponent<AudioSource>().Play();
 
-
         GameManager.scoreJ1 = 0;
         GameManager.scoreJ2 = 0;
+
+        this.estEnPause = false;
 
         this.InstancierNouvelleBalle();
     }
@@ -79,12 +82,14 @@ public class GameManager : MonoBehaviour
     public void MettreEnPause()
     {
         Time.timeScale = 0;
+        this.estEnPause = true;
         uiManager.AfficherMenuPause();
     }
 
     public void ReprendreLeJeu()
     {
         Time.timeScale = 1;
+        this.estEnPause = false;
         uiManager.CacherMenuPause();
     }
 
