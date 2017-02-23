@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class BalleManager : MonoBehaviour
 {
-    
+
     public Rigidbody2D rb;
     public AudioSource sonCollisionMur;
 
@@ -31,7 +31,6 @@ public class BalleManager : MonoBehaviour
         this.dureeVieBalleEnCours = Time.time - timerComparaison;
 
         this.GererVitesseBalleEnFonctionDuTemps(this.dureeVieBalleEnCours);
-
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -55,7 +54,7 @@ public class BalleManager : MonoBehaviour
         {
             this.rb.velocity = new Vector2(-vitesseDeplacementBalleX, vitesseDeplacementBalleY);
             this.vitesseDeplacementBalleX = -vitesseDeplacementBalleX;
-            
+
         }
         else if (collision.gameObject.tag == "Joueur2")
         {
@@ -71,11 +70,11 @@ public class BalleManager : MonoBehaviour
                 // GESTION COLLISION AVEC BUTS JOUEURS
                 if (collision.gameObject.tag == "MurGauche")
                 {
-                    GameManager.scoreJ2 = GameManager.scoreJ2 + 1;                    
+                    GameManager.scoreJ2 = GameManager.scoreJ2 + 1;
                 }
                 else if (collision.gameObject.tag == "MurDroite")
                 {
-                    GameManager.scoreJ1 = GameManager.scoreJ1 + 1;                    
+                    GameManager.scoreJ1 = GameManager.scoreJ1 + 1;
                 }
 
                 //DESTRUCTION DE LA BALLE SI BUT
@@ -100,8 +99,6 @@ public class BalleManager : MonoBehaviour
         else
             this.vitesseDeplacementBalleY = 5;
 
-        
-
         //ON APPPLIQUE LA FORCE AU RIGIBODY
         this.rb = GetComponent<Rigidbody2D>();
         this.rb.velocity = new Vector3(vitesseDeplacementBalleX, vitesseDeplacementBalleY, 0);
@@ -123,6 +120,6 @@ public class BalleManager : MonoBehaviour
             this.vitesseDeplacementBalleY -= 0.003f;
 
     }
-    
+
 
 }

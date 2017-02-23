@@ -93,6 +93,17 @@ public class GameManager : MonoBehaviour
         uiManager.CacherMenuPause();
     }
 
+    public void Rejouer()
+    {
+        UnityEngine.SceneManagement.SceneManager.LoadScene("Pong2D");
+    }
+
+    public void RevenirAuMenuPrincipal()
+    {
+        UnityEngine.SceneManagement.SceneManager.LoadScene("Pong2D_MenuPrincipal");
+    }
+
+
     public void QuitterLeJeu()
     {
         Application.Quit();
