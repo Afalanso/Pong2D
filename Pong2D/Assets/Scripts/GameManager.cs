@@ -33,7 +33,7 @@ public class GameManager : MonoBehaviour
         GameManager.scoreJ2 = 0;
 
         this.estEnPause = false;
-        this.scoreWinCondition = 1;
+        this.scoreWinCondition = 5;
 
         this.InstancierNouvelleBalle();
     }
