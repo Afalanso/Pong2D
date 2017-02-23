@@ -23,6 +23,7 @@ public class GameManager : MonoBehaviour
     {
         sonJeu.GetComponent<AudioSource>().Play();
 
+
         GameManager.scoreJ1 = 0;
         GameManager.scoreJ2 = 0;
 
