@@ -33,7 +33,7 @@ public class BalleManager : MonoBehaviour
     {
         this.dureeVieBalleEnCours = Time.time - timerComparaison;
 
-        this.GererVitesseBalleEnFonctionDuTemps(this.dureeVieBalleEnCours);
+        //this.GererVitesseBalleEnFonctionDuTemps(this.dureeVieBalleEnCours);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -41,7 +41,9 @@ public class BalleManager : MonoBehaviour
         // GESTION COLLISION AVEC MURS HAUT ET BAS
         if (collision.gameObject.tag == "MurHaut" || collision.gameObject.tag == "MurBas")
         {
-            this.rb.velocity = new Vector2(vitesseDeplacementBalleX, -vitesseDeplacementBalleY);
+            this.rb.AddForce(new Vector2(this.vitesseDeplacementBalleX, -this.vitesseDeplacementBalleY));
+            
+            //this.rb.velocity = new Vector2(vitesseDeplacementBalleX, -vitesseDeplacementBalleY);
             this.vitesseDeplacementBalleY = -vitesseDeplacementBalleY;
 
             this.audioManager.jouerSonCollisionBalleContreMur();
@@ -50,9 +52,27 @@ public class BalleManager : MonoBehaviour
         // GESTION COLLISION AVEC JOUEURS 1 ET 2
         if (collision.gameObject.tag == "Joueur1" || collision.gameObject.tag == "Joueur2")
         {
-            this.rb.velocity = new Vector2(-vitesseDeplacementBalleX, vitesseDeplacementBalleY);
-            this.vitesseDeplacementBalleX = -vitesseDeplacementBalleX;
-            this.audioManager.jouerSonCollisionBalleContreJoueur();
+            GameObject raquette = collision.gameObject;
+            if(raquette.transform.position.y > this.transform.position.y)
+            {
+                this.rb.velocity = new Vector2(-vitesseDeplacementBalleX, vitesseDeplacementBalleY - 5);
+                this.vitesseDeplacementBalleX = -vitesseDeplacementBalleX;
+
+            }
+            else if(raquette.transform.position.y < this.transform.position.y)
+            {
+                this.rb.velocity = new Vector2(-vitesseDeplacementBalleX, vitesseDeplacementBalleY + 5);
+                this.vitesseDeplacementBalleX = -vitesseDeplacementBalleX;
+            }
+            else
+            {
+                this.rb.velocity = new Vector2(-vitesseDeplacementBalleX, vitesseDeplacementBalleY);
+                this.vitesseDeplacementBalleX = -vitesseDeplacementBalleX;
+            }
+                 
+            
+            this.audioManager.jouerSonCollisionBalleContreJoueur();         
+            
         }
 
 
@@ -90,9 +110,9 @@ public class BalleManager : MonoBehaviour
             this.vitesseDeplacementBalleX = 5;
 
         if (randNumY > 0.5f)
-            this.vitesseDeplacementBalleY = -5;
+            this.vitesseDeplacementBalleY = -1;
         else
-            this.vitesseDeplacementBalleY = 5;
+            this.vitesseDeplacementBalleY = 1;
 
         //ON APPPLIQUE LA FORCE AU RIGIBODY
         this.rb = GetComponent<Rigidbody2D>();
