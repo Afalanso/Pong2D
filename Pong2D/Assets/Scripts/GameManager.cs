@@ -11,9 +11,8 @@ public class GameManager : MonoBehaviour
 
     public GameObject joueur1;
     public GameObject joueur2;
-    public GameObject son;
-    public GameObject sonJeu;
     public GameObject balle;
+    public AudioManager audioManager;   
     public UIManager uiManager;
 
     public float scoreWinCondition;
@@ -22,12 +21,12 @@ public class GameManager : MonoBehaviour
     private bool _decompteBalleEnCours;
 
     public bool estEnPause;
-
-
+    
     // Use this for initialization
     void Start()
     {
-        sonJeu.GetComponent<AudioSource>().Play();
+        this.audioManager.jouerSonPrincipal();
+        //sonJeu.GetComponent<AudioSource>().Play();
 
         GameManager.scoreJ1 = 0;
         GameManager.scoreJ2 = 0;
@@ -52,7 +51,7 @@ public class GameManager : MonoBehaviour
             if (nouvelleBalle == null && _decompteBalleEnCours != true)
             {
                 //SON BUT
-                son.GetComponent<AudioSource>().Play();
+                //son.GetComponent<AudioSource>().Play();
                 this.InstancierNouvelleBalle();
             }
         }

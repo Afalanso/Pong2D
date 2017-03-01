@@ -74,7 +74,7 @@ public class InputManager : MonoBehaviour
 
     public void seDeplacerVersBas(GameObject GO_Joueur)
     {
-        GO_Joueur.transform.Translate(Vector3.down * Time.deltaTime * vitesseJoueur1);
+        GO_Joueur.transform.Translate(Vector3.down * Time.deltaTime * vitesseJoueur2);
     }
 
 

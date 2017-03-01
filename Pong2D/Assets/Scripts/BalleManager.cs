@@ -6,7 +6,7 @@ public class BalleManager : MonoBehaviour
 {
 
     public Rigidbody2D rb;
-    public AudioSource sonCollisionMur;
+    public AudioManager audioManager;
 
 
     private float vitesseDeplacementBalleX;
@@ -18,11 +18,14 @@ public class BalleManager : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        this.audioManager = GameObject.Find("AudioManager").GetComponent<AudioManager>();
+
         //INIT DES VARIABLES SERVANT A GERER LE TEMPS D'INSTANCE DE CHAQUE BALLE
         this.dureeVieBalleEnCours = 0;
         this.timerComparaison = Time.time;
 
         this.AppliquerDirectionAleatoireSurBalle();
+
     }
 
     // Update is called once per frame
@@ -38,13 +41,13 @@ public class BalleManager : MonoBehaviour
         // GESTION COLLISION AVEC MURS HAUT ET BAS
         if (collision.gameObject.tag == "MurHaut")
         {
-            this.sonCollisionMur.Play();
+            //this.sonCollisionMur.Play();
             this.rb.velocity = new Vector2(vitesseDeplacementBalleX, -vitesseDeplacementBalleY);
             this.vitesseDeplacementBalleY = -vitesseDeplacementBalleY;
         }
         else if (collision.gameObject.tag == "MurBas")
         {
-            this.sonCollisionMur.Play();
+            //this.sonCollisionMur.Play();
             this.rb.velocity = new Vector2(vitesseDeplacementBalleX, -vitesseDeplacementBalleY);
             this.vitesseDeplacementBalleY = -vitesseDeplacementBalleY;
         }
@@ -77,7 +80,9 @@ public class BalleManager : MonoBehaviour
                     GameManager.scoreJ1 = GameManager.scoreJ1 + 1;
                 }
 
-                //DESTRUCTION DE LA BALLE SI BUT
+                
+                this.audioManager.jouerSonBut();
+                                
                 GameObject.Destroy(this.gameObject);
             }
 
