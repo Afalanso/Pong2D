@@ -57,12 +57,14 @@ public class BalleManager : MonoBehaviour
         {
             this.rb.velocity = new Vector2(-vitesseDeplacementBalleX, vitesseDeplacementBalleY);
             this.vitesseDeplacementBalleX = -vitesseDeplacementBalleX;
+            this.audioManager.jouerSonCollisionBalleContreJoueur();        
 
         }
         else if (collision.gameObject.tag == "Joueur2")
         {
             this.rb.velocity = new Vector2(-vitesseDeplacementBalleX, vitesseDeplacementBalleY);
             this.vitesseDeplacementBalleX = -vitesseDeplacementBalleX;
+            this.audioManager.jouerSonCollisionBalleContreJoueur();
         }
 
         // GESTION COLLISION AVEC LES BUTS (MURS GAUCHE ET DROITE)
