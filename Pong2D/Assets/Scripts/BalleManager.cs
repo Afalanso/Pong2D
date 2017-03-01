@@ -39,33 +39,22 @@ public class BalleManager : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collision)
     {
         // GESTION COLLISION AVEC MURS HAUT ET BAS
-        if (collision.gameObject.tag == "MurHaut")
+        if (collision.gameObject.tag == "MurHaut" || collision.gameObject.tag == "MurBas")
         {
-            //this.sonCollisionMur.Play();
             this.rb.velocity = new Vector2(vitesseDeplacementBalleX, -vitesseDeplacementBalleY);
             this.vitesseDeplacementBalleY = -vitesseDeplacementBalleY;
-        }
-        else if (collision.gameObject.tag == "MurBas")
-        {
-            //this.sonCollisionMur.Play();
-            this.rb.velocity = new Vector2(vitesseDeplacementBalleX, -vitesseDeplacementBalleY);
-            this.vitesseDeplacementBalleY = -vitesseDeplacementBalleY;
+
+            this.audioManager.jouerSonCollisionBalleContreMur();
         }
 
-        // GESTION COLLISION AVEC BARRES JOUEURS
-        if (collision.gameObject.tag == "Joueur1")
-        {
-            this.rb.velocity = new Vector2(-vitesseDeplacementBalleX, vitesseDeplacementBalleY);
-            this.vitesseDeplacementBalleX = -vitesseDeplacementBalleX;
-            this.audioManager.jouerSonCollisionBalleContreJoueur();        
-
-        }
-        else if (collision.gameObject.tag == "Joueur2")
+        // GESTION COLLISION AVEC JOUEURS 1 ET 2
+        if (collision.gameObject.tag == "Joueur1" || collision.gameObject.tag == "Joueur2")
         {
             this.rb.velocity = new Vector2(-vitesseDeplacementBalleX, vitesseDeplacementBalleY);
             this.vitesseDeplacementBalleX = -vitesseDeplacementBalleX;
             this.audioManager.jouerSonCollisionBalleContreJoueur();
         }
+
 
         // GESTION COLLISION AVEC LES BUTS (MURS GAUCHE ET DROITE)
         if (collision.gameObject.name.Contains("GO_Mur"))
@@ -82,9 +71,8 @@ public class BalleManager : MonoBehaviour
                     GameManager.scoreJ1 = GameManager.scoreJ1 + 1;
                 }
 
-                
                 this.audioManager.jouerSonBut();
-                                
+
                 GameObject.Destroy(this.gameObject);
             }
 
