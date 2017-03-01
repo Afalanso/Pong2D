@@ -33,7 +33,7 @@ public class BalleManager : MonoBehaviour
     {
         this.dureeVieBalleEnCours = Time.time - timerComparaison;
 
-        //this.GererVitesseBalleEnFonctionDuTemps(this.dureeVieBalleEnCours);
+        this.GererVitesseBalleEnFonctionDuTemps(this.dureeVieBalleEnCours);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -41,9 +41,9 @@ public class BalleManager : MonoBehaviour
         // GESTION COLLISION AVEC MURS HAUT ET BAS
         if (collision.gameObject.tag == "MurHaut" || collision.gameObject.tag == "MurBas")
         {
-            this.rb.AddForce(new Vector2(this.vitesseDeplacementBalleX, -this.vitesseDeplacementBalleY));
+            //this.rb.AddForce(new Vector2(0, - (2*this.vitesseDeplacementBalleY)));
             
-            //this.rb.velocity = new Vector2(vitesseDeplacementBalleX, -vitesseDeplacementBalleY);
+            this.rb.velocity = new Vector2(vitesseDeplacementBalleX, -vitesseDeplacementBalleY);
             this.vitesseDeplacementBalleY = -vitesseDeplacementBalleY;
 
             this.audioManager.jouerSonCollisionBalleContreMur();
@@ -53,24 +53,33 @@ public class BalleManager : MonoBehaviour
         if (collision.gameObject.tag == "Joueur1" || collision.gameObject.tag == "Joueur2")
         {
             GameObject raquette = collision.gameObject;
-            if(raquette.transform.position.y > this.transform.position.y)
+            //COUP VERS LE BAS
+            if (raquette.transform.position.y > this.transform.position.y)
             {
-                this.rb.velocity = new Vector2(-vitesseDeplacementBalleX, vitesseDeplacementBalleY - 5);
-                this.vitesseDeplacementBalleX = -vitesseDeplacementBalleX;
+                //this.rb.AddForce(new Vector2(-this.vitesseDeplacementBalleX, 0));
+                this.rb.velocity = new Vector2(-vitesseDeplacementBalleX, vitesseDeplacementBalleY);
+                this.rb.AddForce(new Vector2(0, -50));
+                
+
 
             }
-            else if(raquette.transform.position.y < this.transform.position.y)
+            //COUP VERS LE HAUT
+            else if (raquette.transform.position.y < this.transform.position.y)
             {
-                this.rb.velocity = new Vector2(-vitesseDeplacementBalleX, vitesseDeplacementBalleY + 5);
-                this.vitesseDeplacementBalleX = -vitesseDeplacementBalleX;
+                //this.rb.AddForce(new Vector2(-this.vitesseDeplacementBalleX, this.vitesseDeplacementBalleY));
+                this.rb.velocity = new Vector2(-vitesseDeplacementBalleX, vitesseDeplacementBalleY );
+                this.rb.AddForce(new Vector2(0, 50));
+
             }
             else
             {
+                //this.rb.AddForce(new Vector2(-this.vitesseDeplacementBalleX, this.vitesseDeplacementBalleY));
                 this.rb.velocity = new Vector2(-vitesseDeplacementBalleX, vitesseDeplacementBalleY);
-                this.vitesseDeplacementBalleX = -vitesseDeplacementBalleX;
+                
             }
-                 
-            
+
+            this.vitesseDeplacementBalleX = -vitesseDeplacementBalleX;
+
             this.audioManager.jouerSonCollisionBalleContreJoueur();         
             
         }
@@ -117,6 +126,7 @@ public class BalleManager : MonoBehaviour
         //ON APPPLIQUE LA FORCE AU RIGIBODY
         this.rb = GetComponent<Rigidbody2D>();
         this.rb.velocity = new Vector3(vitesseDeplacementBalleX, vitesseDeplacementBalleY, 0);
+        //this.rb.AddForce(new Vector2(this.vitesseDeplacementBalleX, this.vitesseDeplacementBalleY));
 
 
     }
@@ -133,6 +143,17 @@ public class BalleManager : MonoBehaviour
             this.vitesseDeplacementBalleY += 0.003f;
         else
             this.vitesseDeplacementBalleY -= 0.003f;
+
+        //if (this.vitesseDeplacementBalleX > 0)
+        //    this.vitesseDeplacementBalleX += 1;
+        //else
+        //    this.vitesseDeplacementBalleX -= 1;
+
+        //if (this.vitesseDeplacementBalleY > 0)
+        //    this.vitesseDeplacementBalleY += 1;
+        //else
+        //    this.vitesseDeplacementBalleY -= 1;
+
 
     }
 

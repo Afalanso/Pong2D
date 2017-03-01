@@ -49,9 +49,7 @@ public class GameManager : MonoBehaviour
         {
             //ON TEST SI LA BALLE EN COURS EST DETRUITE ET SI UN COMPTEUR DE LANCEMENT BALLE N'EST PAS EN COURS
             if (nouvelleBalle == null && _decompteBalleEnCours != true)
-            {
-                //SON BUT
-                //son.GetComponent<AudioSource>().Play();
+            {                
                 this.InstancierNouvelleBalle();
             }
         }
