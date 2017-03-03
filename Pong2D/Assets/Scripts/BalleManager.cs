@@ -5,12 +5,14 @@ using UnityEngine;
 public class BalleManager : MonoBehaviour
 {
 
+    enum ConfigBalle
+    {
+        VitesseBalle = 6
+    }
+
     public Rigidbody2D rb;
     public AudioManager audioManager;
-
-
-    private float vitesseDeplacementBalleX;
-    private float vitesseDeplacementBalleY;
+           
     private float dureeVieBalleEnCours;
     private float timerComparaison;
 
@@ -38,53 +40,62 @@ public class BalleManager : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        // GESTION COLLISION AVEC MURS HAUT ET BAS
-        if (collision.gameObject.tag == "MurHaut" || collision.gameObject.tag == "MurBas")
+
+        #region Collision Joueur
+        if (collision.gameObject.tag == "Player")
         {
-            //this.rb.AddForce(new Vector2(0, - (2*this.vitesseDeplacementBalleY)));
-            
-            this.rb.velocity = new Vector2(vitesseDeplacementBalleX, -vitesseDeplacementBalleY);
-            this.vitesseDeplacementBalleY = -vitesseDeplacementBalleY;
+            GameObject raquette = collision.gameObject;
+
+            float positionBasseRaquette = raquette.transform.position.y - (raquette.GetComponent<BoxCollider2D>().size.y / 4);
+            float positionHauteRaquette = raquette.transform.position.y + (raquette.GetComponent<BoxCollider2D>().size.y / 4);
+
+            if (this.rb.transform.position.y > positionHauteRaquette)
+            {
+                print("HAUT");
+                this.rb.velocity = new Vector2(this.rb.velocity.x * -1f, this.rb.velocity.y + 1);
+            }
+            else if (this.rb.transform.position.y < positionBasseRaquette)
+            {
+                print("BAS");
+                this.rb.velocity = new Vector2(this.rb.velocity.x * -1f, this.rb.velocity.y - 1);
+            }
+            else
+            {
+                print("MILIEU");
+                //this.rb.velocity = new Vector2(this.rb.velocity.x * -1f, this.rb.velocity.y); = ANCIENNE CONFIG
+                this.rb.velocity = new Vector2(this.rb.velocity.x * -1f, this.rb.velocity.y);
+            }
+
+            this.audioManager.jouerSonCollisionBalleContreJoueur();
+
+            //print("positionHaute : " + positionHauteRaquette);
+            //print("positionBasse : " + positionBasseRaquette);
+            //print("Differentre entre Haute et Basse " + (positionHauteRaquette - positionBasseRaquette));
+
+            //print("Raquette position Y : " + raquette.transform.position.y);
+            //print("Balle position Y : " + this.transform.position.y);
+            //print((this.transform.position.y - raquette.transform.position.y) + "= Diff");            
+        }
+        #endregion
+
+
+        // GESTION COLLISION AVEC MURS HAUT ET BAS
+        if (collision.gameObject.tag == "MurHaut")
+        {
+            this.rb.velocity = new Vector2(this.rb.velocity.x, this.rb.velocity.y * -1f);
+            //this.vitesseDeplacementBalleY = -vitesseDeplacementBalleY;
+            this.audioManager.jouerSonCollisionBalleContreMur();
+        }
+
+        if (collision.gameObject.tag == "MurBas")
+        {
+            this.rb.velocity = new Vector2(this.rb.velocity.x, this.rb.velocity.y * -1f);
+            //this.vitesseDeplacementBalleY = -vitesseDeplacementBalleY;
 
             this.audioManager.jouerSonCollisionBalleContreMur();
         }
 
-        // GESTION COLLISION AVEC JOUEURS 1 ET 2
-        if (collision.gameObject.tag == "Joueur1" || collision.gameObject.tag == "Joueur2")
-        {
-            GameObject raquette = collision.gameObject;
-            //COUP VERS LE BAS
-            if (raquette.transform.position.y > this.transform.position.y)
-            {
-                //this.rb.AddForce(new Vector2(-this.vitesseDeplacementBalleX, 0));
-                this.rb.velocity = new Vector2(-vitesseDeplacementBalleX, vitesseDeplacementBalleY);
-                this.rb.AddForce(new Vector2(0, -50));
-                
-
-
-            }
-            //COUP VERS LE HAUT
-            else if (raquette.transform.position.y < this.transform.position.y)
-            {
-                //this.rb.AddForce(new Vector2(-this.vitesseDeplacementBalleX, this.vitesseDeplacementBalleY));
-                this.rb.velocity = new Vector2(-vitesseDeplacementBalleX, vitesseDeplacementBalleY );
-                this.rb.AddForce(new Vector2(0, 50));
-
-            }
-            else
-            {
-                //this.rb.AddForce(new Vector2(-this.vitesseDeplacementBalleX, this.vitesseDeplacementBalleY));
-                this.rb.velocity = new Vector2(-vitesseDeplacementBalleX, vitesseDeplacementBalleY);
-                
-            }
-
-            this.vitesseDeplacementBalleX = -vitesseDeplacementBalleX;
-
-            this.audioManager.jouerSonCollisionBalleContreJoueur();         
-            
-        }
-
-
+        #region Collision Buts
         // GESTION COLLISION AVEC LES BUTS (MURS GAUCHE ET DROITE)
         if (collision.gameObject.name.Contains("GO_Mur"))
         {
@@ -106,54 +117,72 @@ public class BalleManager : MonoBehaviour
             }
 
         }
+        #endregion
+
     }
+
+
 
     private void AppliquerDirectionAleatoireSurBalle()
     {
+        this.rb = GetComponent<Rigidbody2D>();
+        Vector2 velocityBalle;
+
         float randNumX = Random.value;
         float randNumY = Random.value;
 
         if (randNumX > 0.5f)
-            this.vitesseDeplacementBalleX = -5;
+            velocityBalle.x = -6;
         else
-            this.vitesseDeplacementBalleX = 5;
+            velocityBalle.x = 6;
 
         if (randNumY > 0.5f)
-            this.vitesseDeplacementBalleY = -1;
+            velocityBalle.y = -0.5f;
         else
-            this.vitesseDeplacementBalleY = 1;
+            velocityBalle.y = 0.5f;
 
         //ON APPPLIQUE LA FORCE AU RIGIBODY
-        this.rb = GetComponent<Rigidbody2D>();
-        this.rb.velocity = new Vector3(vitesseDeplacementBalleX, vitesseDeplacementBalleY, 0);
-        //this.rb.AddForce(new Vector2(this.vitesseDeplacementBalleX, this.vitesseDeplacementBalleY));
-
-
+        this.rb.velocity = velocityBalle;
     }
+
 
     private void GererVitesseBalleEnFonctionDuTemps(float durreVieBalleEnCoursMethod)
     {
-
-        if (this.vitesseDeplacementBalleX > 0)
-            this.vitesseDeplacementBalleX += 0.003f;
-        else
-            this.vitesseDeplacementBalleX -= 0.003f;
-
-        if (this.vitesseDeplacementBalleY > 0)
-            this.vitesseDeplacementBalleY += 0.003f;
-        else
-            this.vitesseDeplacementBalleY -= 0.003f;
+        Vector2 velocity = this.rb.velocity;
+        float velocityX = velocity.x;
+        float velocityY = velocity.y;
 
         //if (this.vitesseDeplacementBalleX > 0)
-        //    this.vitesseDeplacementBalleX += 1;
+        //    this.vitesseDeplacementBalleX += 0.003f;
         //else
-        //    this.vitesseDeplacementBalleX -= 1;
+        //    this.vitesseDeplacementBalleX -= 0.003f;
 
         //if (this.vitesseDeplacementBalleY > 0)
-        //    this.vitesseDeplacementBalleY += 1;
+        //    this.vitesseDeplacementBalleY += 0.003f;
         //else
-        //    this.vitesseDeplacementBalleY -= 1;
+        //    this.vitesseDeplacementBalleY -= 0.003f;
 
+        if (this.rb.velocity.x > 0)
+        {
+            velocityX += 0.003f;
+            this.rb.velocity = new Vector2(velocityX, this.rb.velocity.y);
+        }
+        else
+        {
+            velocityX -= 0.003f;
+            this.rb.velocity = new Vector2(velocityX, this.rb.velocity.y);
+        }
+
+        if (this.rb.velocity.y > 0)
+        {
+            velocityY += 0.003f;
+            this.rb.velocity = new Vector2(this.rb.velocity.x, velocityY);
+        }
+        else
+        {
+            velocityX -= 0.003f;
+            this.rb.velocity = new Vector2(this.rb.velocity.x, velocityY);
+        }
 
     }
 
