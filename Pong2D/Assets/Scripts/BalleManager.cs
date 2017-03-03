@@ -52,18 +52,25 @@ public class BalleManager : MonoBehaviour
             if (this.rb.transform.position.y > positionHauteRaquette)
             {
                 print("HAUT");
-                this.rb.velocity = new Vector2(this.rb.velocity.x * -1f, this.rb.velocity.y + 1);
+                this.rb.velocity = new Vector2(this.rb.velocity.x * -1f, this.rb.velocity.y + 2.5f);
             }
             else if (this.rb.transform.position.y < positionBasseRaquette)
             {
                 print("BAS");
-                this.rb.velocity = new Vector2(this.rb.velocity.x * -1f, this.rb.velocity.y - 1);
+                this.rb.velocity = new Vector2(this.rb.velocity.x * -1f, this.rb.velocity.y - 2.5f);
             }
-            else
+            else      //Milieu de la raquette
             {
+                float attenuationVelocity = 2.3f; ;     //Plus l'attenuation est élevée, plus la balle revient vers une trajectoire horizontale 
                 print("MILIEU");
-                //this.rb.velocity = new Vector2(this.rb.velocity.x * -1f, this.rb.velocity.y); = ANCIENNE CONFIG
-                this.rb.velocity = new Vector2(this.rb.velocity.x * -1f, this.rb.velocity.y);
+                if(this.rb.velocity.y > 0)
+                {                    
+                    this.rb.velocity = new Vector2(this.rb.velocity.x * -1f, (this.rb.velocity.y / attenuationVelocity));
+                }
+                else
+                {
+                    this.rb.velocity = new Vector2(this.rb.velocity.x * -1f, (this.rb.velocity.y / attenuationVelocity));
+                }
             }
 
             this.audioManager.jouerSonCollisionBalleContreJoueur();
